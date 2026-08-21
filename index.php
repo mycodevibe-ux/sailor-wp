@@ -2,6 +2,11 @@
 /**
  * Theme Index & Blog Archive (100% Matches Sailor html/blog.html design)
  */
+if ( is_front_page() && file_exists(get_template_directory() . '/front-page.php') ) {
+    include get_template_directory() . '/front-page.php';
+    return;
+}
+
 get_header();
 ?>
 
