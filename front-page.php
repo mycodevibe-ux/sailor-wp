@@ -13,7 +13,35 @@ $front_id  = get_the_ID();
 ============================================================ -->
 <?php
 $hero_show   = function_exists('get_field') ? get_field('hero_show', $front_id) : true;
+if ($hero_show === null || $hero_show === '') $hero_show = true;
 $hero_slides = function_exists('get_field') ? get_field('hero_slides', $front_id) : false;
+
+// Robust Fallback slides if ACF repeater is empty
+if (empty($hero_slides)) {
+    $hero_slides = array(
+        array(
+            'image'       => array('url' => $asset_uri . '/img/hero-carousel/hero-carousel-1.jpg'),
+            'title'       => 'Welcome to Sailor',
+            'description' => 'Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem.',
+            'button_text' => 'Get Started',
+            'button_link' => '#about'
+        ),
+        array(
+            'image'       => array('url' => $asset_uri . '/img/hero-carousel/hero-carousel-2.jpg'),
+            'title'       => 'At vero eos et accusamus',
+            'description' => 'Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.',
+            'button_text' => 'Our Services',
+            'button_link' => '#services'
+        ),
+        array(
+            'image'       => array('url' => $asset_uri . '/img/hero-carousel/hero-carousel-3.jpg'),
+            'title'       => 'Temporibus autem quibusdam',
+            'description' => 'Beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.',
+            'button_text' => 'Contact Us',
+            'button_link' => '#contact'
+        ),
+    );
+}
 
 if ($hero_show && !empty($hero_slides)) :
 ?>
@@ -69,8 +97,15 @@ $about_subtitle = function_exists('get_field') ? get_field('about_section_subtit
 $about_title    = function_exists('get_field') ? get_field('about_section_title', $front_id) : '';
 $about_left     = function_exists('get_field') ? get_field('about_left_text', $front_id) : '';
 $about_right    = function_exists('get_field') ? get_field('about_right_text', $front_id) : '';
-$about_btn_text = function_exists('get_field') ? get_field('about_btn_text', $front_id) : '';
-$about_btn_link = function_exists('get_field') ? get_field('about_btn_link', $front_id) : '';
+// About fallbacks
+if (empty($about_title) && empty($about_left)) {
+    $about_subtitle = 'About Us';
+    $about_title    = 'Learn More About What We Do';
+    $about_left     = '<p>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><ul><li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li><li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li><li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li></ul>';
+    $about_right    = '<p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>';
+    $about_btn_text = 'Read More';
+    $about_btn_link = home_url('/about/');
+}
 
 if ($about_show && ($about_title || $about_left || $about_right)) :
 ?>
@@ -111,7 +146,19 @@ if ($about_show && ($about_title || $about_left || $about_right)) :
 ============================================================ -->
 <?php
 $clients_show = function_exists('get_field') ? get_field('clients_show', $front_id) : true;
+if ($clients_show === null || $clients_show === '') $clients_show = true;
 $clients_list = function_exists('get_field') ? get_field('clients_list', $front_id) : false;
+
+if (empty($clients_list)) {
+    $clients_list = array(
+        array('image' => array('url' => $asset_uri . '/img/clients/client-1.png'), 'name' => 'Client 1'),
+        array('image' => array('url' => $asset_uri . '/img/clients/client-2.png'), 'name' => 'Client 2'),
+        array('image' => array('url' => $asset_uri . '/img/clients/client-3.png'), 'name' => 'Client 3'),
+        array('image' => array('url' => $asset_uri . '/img/clients/client-4.png'), 'name' => 'Client 4'),
+        array('image' => array('url' => $asset_uri . '/img/clients/client-5.png'), 'name' => 'Client 5'),
+        array('image' => array('url' => $asset_uri . '/img/clients/client-6.png'), 'name' => 'Client 6'),
+    );
+}
 
 if ($clients_show && !empty($clients_list)) :
 ?>
