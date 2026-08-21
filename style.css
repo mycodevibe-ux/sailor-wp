@@ -1,0 +1,474 @@
+/*   
+Theme Name: Sailor Custom Theme
+Theme URI: https://bootstrapmade.com/sailor-free-bootstrap-theme/
+Description: Custom WordPress theme converted from Sailor Bootstrap 5 template with Raleway headings and PT Sans body typography.
+Author: Custom Theme Developer
+Version: 1.0.0
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --default-font: "PT Sans", system-ui, -apple-system, sans-serif !important;
+  --heading-font: "Raleway", sans-serif !important;
+  --nav-font: "Poppins", sans-serif !important;
+}
+
+/* ============================================================
+   1. DEFAULT BODY & CONTENT: PT Sans
+============================================================ */
+body,
+p,
+a,
+span,
+li,
+blockquote,
+button,
+input,
+textarea,
+select,
+.hero p,
+.about p,
+.services p,
+.portfolio-info p,
+.member-info span,
+.testimonial-item p,
+.pricing-item ul,
+.footer p,
+.footer-links ul li a,
+.footer-contact p,
+.meta-top,
+.meta-top span,
+.meta-top a,
+.meta-top li,
+.content p,
+.navmenu a {
+  font-family: 'PT Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* ============================================================
+   2. HEADINGS & TITLES: Raleway
+============================================================ */
+h1, h2, h3, h4, h5, h6,
+.sitename,
+.page-title h1,
+.section-title h2,
+.section-title p,
+.widget-title,
+.portfolio-info h4,
+.member-info h4,
+.testimonial-item h3,
+.pricing-item h3,
+.pricing-item h4,
+.post-item h4 a,
+.title a,
+article .title,
+article .title a {
+  font-family: 'Raleway', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* ============================================================
+   3. HEADER CONTACT BUTTON STYLING (Same as Get Started)
+============================================================ */
+.navmenu ul li a.btn-getstarted,
+.navmenu a.btn-getstarted {
+  color: #ffffff !important;
+  background: var(--accent-color, #d9232d) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 8px 24px !important;
+  margin-left: 20px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease-in-out !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+}
+
+.navmenu ul li a.btn-getstarted:hover,
+.navmenu a.btn-getstarted:hover {
+  color: #ffffff !important;
+  background: color-mix(in srgb, var(--accent-color, #d9232d), #000 12%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(217, 35, 45, 0.25) !important;
+}
+
+/* Mobile Navmenu Adjustment */
+@media (max-width: 1199px) {
+  .navmenu ul li a.btn-getstarted,
+  .navmenu a.btn-getstarted {
+    margin: 10px 20px !important;
+    text-align: center !important;
+  }
+}
+
+/* ============================================================
+   Enhanced Top & Bottom Box-Shadows for Article & Sidebar
+   ============================================================ */
+article.article,
+.article,
+.blog-details .article,
+.widgets-container,
+.blog-details .widgets-container {
+  background-color: var(--surface-color, #ffffff) !important;
+  border-radius: 8px !important;
+  padding: 35px !important;
+  margin-top: 0 !important;
+  margin-bottom: 40px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+article.article .title,
+.article .title {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  font-size: 28px !important;
+  line-height: 1.3 !important;
+}
+
+article.article .post-img,
+.article .post-img {
+  margin: -35px -35px 25px -35px !important;
+  border-radius: 8px 8px 0 0 !important;
+  overflow: hidden !important;
+}
+
+article.article .post-img img,
+.article .post-img img {
+  border-radius: 8px 8px 0 0 !important;
+  width: 100% !important;
+}
+
+/* ============================================================
+   Article Meta Top & Meta Bottom Inline Styling
+   ============================================================ */
+.meta-top,
+.article .meta-top,
+.blog-details .meta-top {
+  margin-top: 15px !important;
+  margin-bottom: 25px !important;
+  color: #64748b !important;
+}
+
+.meta-top ul,
+.article .meta-top ul,
+.blog-details .meta-top ul {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  list-style: none !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  gap: 18px !important;
+}
+
+.meta-top ul li,
+.article .meta-top ul li,
+.blog-details .meta-top ul li {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.meta-top ul li i,
+.article .meta-top ul li i,
+.blog-details .meta-top ul li i {
+  font-size: 15px !important;
+  margin-right: 6px !important;
+  color: #d9232d !important;
+}
+
+.meta-top a,
+.article .meta-top a,
+.blog-details .meta-top a {
+  color: #64748b !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+}
+
+.meta-top a:hover,
+.article .meta-top a:hover {
+  color: #d9232d !important;
+}
+
+.meta-bottom,
+.article .meta-bottom,
+.blog-details .meta-bottom {
+  padding-top: 18px !important;
+  margin-top: 30px !important;
+  border-top: 1px solid #f1f5f9 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 12px 18px !important;
+  font-size: 14px !important;
+  color: #64748b !important;
+}
+
+.meta-bottom i,
+.article .meta-bottom i,
+.blog-details .meta-bottom i {
+  color: #d9232d !important;
+  font-size: 15px !important;
+  margin-right: 4px !important;
+}
+
+.meta-bottom ul.cats,
+.meta-bottom ul.tags,
+.article .meta-bottom ul.cats,
+.article .meta-bottom ul.tags,
+.blog-details .meta-bottom ul.cats,
+.blog-details .meta-bottom ul.tags {
+  list-style: none !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  gap: 6px !important;
+}
+
+.meta-bottom ul.cats li,
+.meta-bottom ul.tags li,
+.article .meta-bottom ul.cats li,
+.article .meta-bottom ul.tags li {
+  display: inline-flex !important;
+  align-items: center !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.meta-bottom ul.cats li a,
+.article .meta-bottom ul.cats li a {
+  color: #d9232d !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+}
+
+.meta-bottom ul.cats li a:hover {
+  text-decoration: underline !important;
+}
+
+.meta-bottom ul.tags li a,
+.article .meta-bottom ul.tags li a {
+  color: #64748b !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 2px 10px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.meta-bottom ul.tags li a:hover {
+  background: #fee2e2 !important;
+  border-color: #d9232d !important;
+  color: #d9232d !important;
+}
+
+/* ============================================================
+   Portfolio Gallery Uniform Height & Object-Fit Styling
+   ============================================================ */
+.portfolio-details .portfolio-details-slider {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+  background-color: #f8fafc !important;
+}
+
+.portfolio-details .portfolio-details-slider .swiper-wrapper {
+  align-items: stretch !important;
+}
+
+.portfolio-details .portfolio-details-slider .swiper-slide {
+  height: 600px !important;
+  max-height: 600px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #f8fafc !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.portfolio-details .portfolio-details-slider img,
+.portfolio-details .portfolio-details-slider .swiper-slide img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 600px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 10px !important;
+}
+
+
+@media (max-width: 991px) {
+  .portfolio-details .portfolio-details-slider .swiper-slide,
+  .portfolio-details .portfolio-details-slider img,
+  .portfolio-details .portfolio-details-slider .swiper-slide img {
+    height: 380px !important;
+    max-height: 380px !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .portfolio-details .portfolio-details-slider .swiper-slide,
+  .portfolio-details .portfolio-details-slider img,
+  .portfolio-details .portfolio-details-slider .swiper-slide img {
+    height: 280px !important;
+    max-height: 280px !important;
+  }
+}
+
+/* Portfolio Archive Grid Item Images */
+.portfolio .portfolio-item img,
+.isotope-container .portfolio-item img {
+  width: 100% !important;
+  height: 280px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 6px !important;
+}
+
+/* ============================================================
+   Team Members Cards, Animations & Uniform Dimensions
+   ============================================================ */
+.team .member {
+  background: var(--surface-color, #ffffff) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.35s ease-in-out !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.team .member:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+  border-color: rgba(217, 35, 45, 0.25) !important;
+}
+
+.team .member .member-img {
+  position: relative !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  height: 280px !important;
+  background-color: #f1f5f9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.team .member .member-img img,
+.team .member img {
+  width: 100% !important;
+  height: 280px !important;
+  object-fit: cover !important;
+  object-position: top center !important;
+  transition: transform 0.4s ease-in-out !important;
+  border-radius: 0 !important;
+}
+
+.team .member:hover .member-img img,
+.team .member:hover img {
+  transform: scale(1.06) !important;
+}
+
+.team .member .social {
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  height: 52px !important;
+  opacity: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%) !important;
+  transition: all 0.3s ease-in-out !important;
+  gap: 12px !important;
+  z-index: 2 !important;
+}
+
+.team .member:hover .social {
+  opacity: 1 !important;
+}
+
+.team .member .social a {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(4px) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.team .member .social a:hover {
+  background: var(--accent-color, #d9232d) !important;
+  color: #ffffff !important;
+  transform: scale(1.15) !important;
+}
+
+.team .member .member-info {
+  padding: 20px !important;
+  text-align: left !important;
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  background: #ffffff !important;
+}
+
+.team .member .member-info h4 {
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+  font-size: 18px !important;
+  color: var(--heading-color, #1e293b) !important;
+  transition: color 0.3s !important;
+}
+
+.team .member:hover .member-info h4 {
+  color: var(--accent-color, #d9232d) !important;
+}
+
+.team .member .member-info span {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #64748b !important;
+  margin-bottom: 8px !important;
+}
+
+.team .member .member-info .social-inline {
+  display: flex !important;
+  gap: 10px !important;
+  margin-top: 4px !important;
+}
+
+.team .member .member-info .social-inline a {
+  color: var(--accent-color, #d9232d) !important;
+  font-size: 15px !important;
+  transition: transform 0.2s, opacity 0.2s !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.team .member .member-info .social-inline a:hover {
+  opacity: 0.7 !important;
+  transform: scale(1.1) !important;
+}
