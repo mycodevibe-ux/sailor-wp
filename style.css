@@ -1,0 +1,65 @@
+/*
+Theme Name: Sailor Custom Theme
+Theme URI: https://bootstrapmade.com/sailor-free-bootstrap-theme/
+Description: Custom WordPress theme converted from Sailor Bootstrap 5 template with Raleway headings and PT Sans body typography.
+Author: Custom Theme Developer
+Version: 1.0.0
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --default-font: "PT Sans", system-ui, -apple-system, sans-serif !important;
+  --heading-font: "Raleway", sans-serif !important;
+  --nav-font: "Poppins", sans-serif !important;
+}
+
+/* ============================================================
+   1. DEFAULT BODY & CONTENT: PT Sans
+============================================================ */
+body,
+p,
+a,
+span,
+li,
+blockquote,
+input,
+textarea,
+select,
+button,
+label {
+  font-family: var(--default-font) !important;
+}
+
+/* ============================================================
+   2. HEADINGS: Raleway
+============================================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title h2,
+.section-title p,
+.sitename,
+.hero h2 {
+  font-family: var(--heading-font) !important;
+}
+
+/* ============================================================
+   3. NAVIGATION & BUTTONS: Poppins
+============================================================ */
+.navmenu,
+.navmenu a,
+.btn-get-started,
+.read-more,
+.btn-submit {
+  font-family: var(--nav-font) !important;
+}
+
+/* Custom Overrides */
+.carousel-control-prev,
+.carousel-control-next {
+  z-index: 10;
+}
