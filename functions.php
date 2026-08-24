@@ -21,6 +21,25 @@ add_filter('dbdelta_create_queries', function($queries) {
     return $queries;
 });
 
+// ============================================================
+// 0b. TiDB Cloud: enable SQL_CALC_FOUND_ROWS support
+// TiDB rejects SQL_CALC_FOUND_ROWS unless tidb_enable_noop_functions is on.
+// Without this, every paginated WP query (admin list tables, REST
+// collections, finite WP_Query) returns zero rows even though the data
+// exists. Runs once per request, before the main query. No-op / skipped
+// on local MySQL, where this variable does not exist.
+// ============================================================
+add_action('after_setup_theme', function() {
+    $host = defined('DB_HOST') ? DB_HOST : '';
+    if ($host === '' || stripos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false) {
+        return; // local MySQL — nothing to do
+    }
+    global $wpdb;
+    $prev = $wpdb->suppress_errors(true);
+    $wpdb->query('SET SESSION tidb_enable_noop_functions = 1');
+    $wpdb->suppress_errors($prev);
+}, 0);
+
 // Auto-activate all theme plugins on load
 add_action('admin_init', function() {
     if (!function_exists('is_plugin_active')) {
