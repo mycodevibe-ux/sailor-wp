@@ -1,8 +1,9 @@
 <?php
 /**
- * Blog Archive Template (100% Matches Sailor html/blog.html design)
+ * Blog Archive Template (100% Matches Sailor html/blog.html design with rich demo articles)
  */
 get_header();
+$asset_uri = get_template_directory_uri() . '/assets';
 ?>
 
 <!-- Page Title -->
@@ -25,136 +26,152 @@ get_header();
 
       <!-- Blog Posts Section -->
       <section id="blog-posts" class="blog-posts section p-0">
-
         <div class="container">
-
           <div class="row gy-4">
 
-            <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+            <?php
+            $default_posts = array(
+                array(
+                    'title'   => 'Dolorum optio tempore voluptas dignissimos cumque fuga qui quibusdam quia',
+                    'author'  => 'John Doe',
+                    'date'    => 'Jan 1, 2026',
+                    'excerpt' => 'Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta. Et ad quas. Enim dolor sunt sit accusantium id.',
+                    'img'     => $asset_uri . '/img/blog/blog-1.jpg'
+                ),
+                array(
+                    'title'   => 'Nisi magni odit consequatur autem nulla dolorem',
+                    'author'  => 'Julia Parker',
+                    'date'    => 'Jun 5, 2026',
+                    'excerpt' => 'Incidunt voluptate sit temporibus aperiam. Quia vitae aut sint ullam quis illum voluptatum et. Quo libero rerum voluptatem pariatur nam. Adipisci qui cupiditate.',
+                    'img'     => $asset_uri . '/img/blog/blog-2.jpg'
+                ),
+                array(
+                    'title'   => 'Possimus soluta ut id suscipit ea ut. In quo quia et soluta libero sit sint.',
+                    'author'  => 'Maria Doe',
+                    'date'    => 'Jul 15, 2026',
+                    'excerpt' => 'Aut iste dolores quo vel quo sint. Vero voluptatem nihil sit et voluptatem sit error. Voluptatem eligendi aut sit qui aspernatur. Laboriosam animi ut et aspernatur.',
+                    'img'     => $asset_uri . '/img/blog/blog-3.jpg'
+                ),
+                array(
+                    'title'   => 'Non rem rerum nam cum quo minus. Dolor distinctio deleniti explicabo eius exercitationem.',
+                    'author'  => 'Admin',
+                    'date'    => 'Aug 20, 2026',
+                    'excerpt' => 'Aspernatur rerum perferendis et sint. Voluptates cupiditate voluptas atque quae. Rem veritatis nemo consequatur est velit.',
+                    'img'     => $asset_uri . '/img/blog/blog-4.jpg'
+                )
+            );
+
+            if (have_posts()) :
+              while (have_posts()) : the_post();
+                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+                if (empty($thumb_url)) $thumb_url = $asset_uri . '/img/blog/blog-1.jpg';
+            ?>
               <div class="col-lg-12">
-                <article>
+                <article class="p-4 bg-white border rounded shadow-sm mb-4">
+                  <div class="post-img mb-3">
+                    <a href="<?php the_permalink(); ?>">
+                      <img src="<?php echo esc_url($thumb_url); ?>" alt="<?php the_title(); ?>" class="img-fluid rounded w-100" style="max-height: 380px; object-fit: cover;">
+                    </a>
+                  </div>
 
-                  <?php if (has_post_thumbnail()) : ?>
-                    <div class="post-img">
-                      <a href="<?php the_permalink(); ?>">
-                        <img src="<?php the_post_thumbnail_url('large'); ?>" alt="<?php the_title(); ?>" class="img-fluid">
-                      </a>
-                    </div>
-                  <?php endif; ?>
-
-                  <h2 class="title">
-                    <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                  <h2 class="title h3 mb-3">
+                    <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a>
                   </h2>
 
-                  <div class="meta-top">
-                    <ul>
-                      <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="<?php the_permalink(); ?>"><?php the_author(); ?></a></li>
-                      <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="<?php the_permalink(); ?>"><time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('M j, Y'); ?></time></a></li>
-                    </ul>
+                  <div class="meta-top text-muted small d-flex gap-3 mb-3">
+                    <span><i class="bi bi-person"></i> <?php the_author(); ?></span>
+                    <span><i class="bi bi-clock"></i> <time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('M j, Y'); ?></time></span>
                   </div>
 
-
-                  <div class="content">
-                    <p><?php echo wp_trim_words(get_the_excerpt(), 35); ?></p>
-                    <div class="read-more">
-                      <a href="<?php the_permalink(); ?>">Read More</a>
-                    </div>
+                  <div class="content mb-3">
+                    <p class="text-muted"><?php echo wp_trim_words(get_the_excerpt(), 35); ?></p>
                   </div>
 
+                  <div class="read-more">
+                    <a href="<?php the_permalink(); ?>" class="btn btn-outline-danger btn-sm">Read More</a>
+                  </div>
                 </article>
-              </div><!-- End post list item -->
-            <?php endwhile; ?>
-
-              <!-- Blog Pagination Section -->
-              <div class="col-12 d-flex justify-content-center mt-4">
-                <?php
-                the_posts_pagination(array(
-                    'mid_size'  => 2,
-                    'prev_text' => '<i class="bi bi-chevron-left"></i>',
-                    'next_text' => '<i class="bi bi-chevron-right"></i>',
-                ));
-                ?>
               </div>
+            <?php endwhile; else :
+              foreach ($default_posts as $dp) :
+            ?>
+              <div class="col-lg-12">
+                <article class="p-4 bg-white border rounded shadow-sm mb-4">
+                  <div class="post-img mb-3">
+                    <img src="<?php echo esc_url($dp['img']); ?>" alt="<?php echo esc_attr($dp['title']); ?>" class="img-fluid rounded w-100" style="max-height: 380px; object-fit: cover;">
+                  </div>
 
-            <?php else : ?>
-              <div class="col-12"><p class="text-muted">No blog posts found.</p></div>
-            <?php endif; ?>
+                  <h2 class="title h3 mb-3">
+                    <a href="#" class="text-dark text-decoration-none"><?php echo esc_html($dp['title']); ?></a>
+                  </h2>
 
-          </div><!-- End blog posts list -->
+                  <div class="meta-top text-muted small d-flex gap-3 mb-3">
+                    <span><i class="bi bi-person"></i> <?php echo esc_html($dp['author']); ?></span>
+                    <span><i class="bi bi-clock"></i> <time><?php echo esc_html($dp['date']); ?></time></span>
+                  </div>
 
+                  <div class="content mb-3">
+                    <p class="text-muted"><?php echo esc_html($dp['excerpt']); ?></p>
+                  </div>
+
+                  <div class="read-more">
+                    <a href="#" class="btn btn-outline-danger btn-sm">Read More</a>
+                  </div>
+                </article>
+              </div>
+            <?php endforeach; endif; ?>
+
+          </div>
         </div>
-
-      </section><!-- /Blog Posts Section -->
+      </section>
 
     </div>
 
     <!-- Sidebar Column -->
     <div class="col-lg-4">
-      <div class="widgets-container">
+      <div class="widgets-container p-4 bg-white border rounded shadow-sm">
 
         <!-- Search Widget -->
-        <div class="search-widget widget-item">
-          <h3 class="widget-title">Search</h3>
-          <form action="<?php echo esc_url(home_url('/')); ?>" method="get">
-            <input type="text" name="s" placeholder="Search..." value="<?php echo get_search_query(); ?>">
-            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        <div class="search-widget widget-item mb-4">
+          <h4 class="widget-title h5 mb-3 border-bottom pb-2">Search</h4>
+          <form action="<?php echo esc_url(home_url('/')); ?>" method="get" class="d-flex">
+            <input type="text" name="s" class="form-control me-2" placeholder="Search..." value="<?php echo get_search_query(); ?>">
+            <button type="submit" class="btn btn-danger"><i class="bi bi-search"></i></button>
           </form>
-        </div><!--/Search Widget -->
+        </div>
 
         <!-- Categories Widget -->
-        <div class="categories-widget widget-item">
-          <h3 class="widget-title">Categories</h3>
-          <ul class="mt-3">
-            <?php
-            $cats = get_categories(array('hide_empty' => true));
-            if (!empty($cats)) :
-              foreach ($cats as $cat) :
-            ?>
-              <li><a href="<?php echo esc_url(get_category_link($cat->term_id)); ?>"><?php echo esc_html($cat->name); ?> <span>(<?php echo $cat->count; ?>)</span></a></li>
-            <?php endforeach; else : ?>
-              <li><a href="#">General <span>(1)</span></a></li>
-            <?php endif; ?>
+        <div class="categories-widget widget-item mb-4">
+          <h4 class="widget-title h5 mb-3 border-bottom pb-2">Categories</h4>
+          <ul class="list-unstyled">
+            <li class="py-1"><a href="#" class="text-muted text-decoration-none">General (2)</a></li>
+            <li class="py-1"><a href="#" class="text-muted text-decoration-none">Lifestyle (4)</a></li>
+            <li class="py-1"><a href="#" class="text-muted text-decoration-none">Travel (3)</a></li>
+            <li class="py-1"><a href="#" class="text-muted text-decoration-none">Design (5)</a></li>
           </ul>
-        </div><!--/Categories Widget -->
+        </div>
 
         <!-- Recent Posts Widget -->
-        <div class="recent-posts-widget widget-item">
-          <h3 class="widget-title">Recent Posts</h3>
-          <?php
-          $recent_posts = new WP_Query(array('post_type' => 'post', 'posts_per_page' => 5, 'post_status' => 'publish'));
-          if ($recent_posts->have_posts()) :
-            while ($recent_posts->have_posts()) : $recent_posts->the_post();
-          ?>
-            <div class="post-item">
-              <?php if (has_post_thumbnail()) : ?>
-                <img src="<?php the_post_thumbnail_url('thumbnail'); ?>" alt="<?php the_title(); ?>" class="flex-shrink-0">
-              <?php endif; ?>
-              <div>
-                <h4><a href="<?php the_permalink(); ?>"><?php echo wp_trim_words(get_the_title(), 7); ?></a></h4>
-                <time datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
-              </div>
-            </div>
-          <?php endwhile; wp_reset_postdata(); endif; ?>
-        </div><!--/Recent Posts Widget -->
+        <div class="recent-posts-widget widget-item mb-4">
+          <h4 class="widget-title h5 mb-3 border-bottom pb-2">Recent Posts</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="#" class="text-dark text-decoration-none fw-semibold">Dolorum optio tempore voluptas</a><br><small class="text-muted">Jan 1, 2026</small></li>
+            <li class="mb-2"><a href="#" class="text-dark text-decoration-none fw-semibold">Nisi magni odit consequatur</a><br><small class="text-muted">Jun 5, 2026</small></li>
+            <li class="mb-2"><a href="#" class="text-dark text-decoration-none fw-semibold">Possimus soluta ut id suscipit</a><br><small class="text-muted">Jul 15, 2026</small></li>
+          </ul>
+        </div>
 
         <!-- Tags Widget -->
         <div class="tags-widget widget-item">
-          <h3 class="widget-title">Tags</h3>
-          <ul>
-            <?php
-            $tags = get_tags(array('hide_empty' => false));
-            if (!empty($tags)) :
-              foreach ($tags as $t) :
-            ?>
-              <li><a href="<?php echo esc_url(get_tag_link($t->term_id)); ?>"><?php echo esc_html($t->name); ?></a></li>
-            <?php endforeach; else : ?>
-              <li><a href="#">App</a></li>
-              <li><a href="#">IT</a></li>
-              <li><a href="#">Business</a></li>
-              <li><a href="#">Design</a></li>
-            <?php endif; ?>
-          </ul>
-        </div><!--/Tags Widget -->
+          <h4 class="widget-title h5 mb-3 border-bottom pb-2">Tags</h4>
+          <div class="d-flex flex-wrap gap-1">
+            <span class="badge bg-light text-dark border p-2">App</span>
+            <span class="badge bg-light text-dark border p-2">IT</span>
+            <span class="badge bg-light text-dark border p-2">Business</span>
+            <span class="badge bg-light text-dark border p-2">Design</span>
+            <span class="badge bg-light text-dark border p-2">Office</span>
+          </div>
+        </div>
 
       </div>
     </div>
