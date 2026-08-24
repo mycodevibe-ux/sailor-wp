@@ -60,76 +60,7 @@ add_action('init', function() {
     }
 }, 1);
 
-// ============================================================
-// 1. THEME SETUP & CPT REGISTRATIONS
-// ============================================================
-function sailor_register_native_cpts() {
-    // Portfolio
-    register_post_type('portfolio', array(
-        'labels' => array('name' => 'Portfolio', 'singular_name' => 'Portfolio Item'),
-        'public' => true,
-        'has_archive' => true,
-        'menu_icon' => 'dashicons-portfolio',
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'page-attributes'),
-        'show_in_rest' => true,
-        'rewrite' => array('slug' => 'portfolio'),
-    ));
-
-    // Services
-    register_post_type('service', array(
-        'labels' => array('name' => 'Services', 'singular_name' => 'Service'),
-        'public' => true,
-        'has_archive' => true,
-        'menu_icon' => 'dashicons-hammer',
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'page-attributes'),
-        'show_in_rest' => true,
-        'rewrite' => array('slug' => 'services'),
-    ));
-    register_post_type('service-item', array(
-        'labels' => array('name' => 'Service Items', 'singular_name' => 'Service Item'),
-        'public' => true,
-        'has_archive' => true,
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
-        'show_in_rest' => true,
-    ));
-
-    // Team
-    register_post_type('team', array(
-        'labels' => array('name' => 'Team', 'singular_name' => 'Team Member'),
-        'public' => true,
-        'has_archive' => false,
-        'menu_icon' => 'dashicons-groups',
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'page-attributes'),
-        'show_in_rest' => true,
-        'rewrite' => array('slug' => 'team'),
-    ));
-
-    // Testimonials
-    register_post_type('testimonial', array(
-        'labels' => array('name' => 'Testimonials', 'singular_name' => 'Testimonial'),
-        'public' => true,
-        'has_archive' => false,
-        'menu_icon' => 'dashicons-testimonial',
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'page-attributes'),
-        'show_in_rest' => true,
-    ));
-    register_post_type('testimonials', array(
-        'labels' => array('name' => 'Testimonials (Alt)', 'singular_name' => 'Testimonial'),
-        'public' => true,
-        'has_archive' => false,
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
-        'show_in_rest' => true,
-    ));
-
-    // Taxonomies
-    register_taxonomy('portfolio-category', 'portfolio', array(
-        'labels' => array('name' => 'Portfolio Categories', 'singular_name' => 'Category'),
-        'hierarchical' => true,
-        'show_in_rest' => true,
-        'rewrite' => array('slug' => 'portfolio-category'),
-    ));
-}
-add_action('init', 'sailor_register_native_cpts');
+// Native CPT Registration moved to unified sailor_register_cpts
 
 // ============================================================
 // 2. THEME SETUP
