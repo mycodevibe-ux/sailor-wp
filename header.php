@@ -12,7 +12,7 @@
 <?php wp_body_open(); ?>
 
   <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="<?php echo esc_url(home_url('/')); ?>" class="logo d-flex align-items-center me-auto">
         <?php if (function_exists('has_custom_logo') && has_custom_logo()) : ?>
@@ -33,17 +33,22 @@
                 'walker'         => class_exists('Sailor_Nav_Walker') ? new Sailor_Nav_Walker() : '',
             ));
         } else {
-            // Dynamic Pages Fallback
-            $pages = get_pages(array('sort_column' => 'menu_order, post_title', 'number' => 7));
-            echo '<ul>';
-            foreach ($pages as $p) {
+            // Perfect Ordered Fallback Menu matching Sailor Template
+            $menu_items = array(
+                array('title' => 'Home',         'url' => home_url('/'),             'slug' => 'home'),
+                array('title' => 'About',        'url' => home_url('/about/'),        'slug' => 'about'),
+                array('title' => 'Services',     'url' => home_url('/services/'),     'slug' => 'services'),
+                array('title' => 'Portfolio',    'url' => home_url('/portfolio/'),    'slug' => 'portfolio'),
+                array('title' => 'Testimonials', 'url' => home_url('/testimonials/'), 'slug' => 'testimonials'),
+                array('title' => 'Blog',         'url' => home_url('/blog/'),         'slug' => 'blog'),
+                array('title' => 'Contact',      'url' => home_url('/contact/'),      'slug' => 'contact'),
+            );
 
-                $is_contact = (strtolower(trim($p->post_title)) === 'contact');
-                $classes = array();
-                if (is_page($p->ID)) $classes[] = 'active';
-                if ($is_contact) $classes[] = 'btn-getstarted';
-                $class_attr = !empty($classes) ? ' class="' . implode(' ', $classes) . '"' : '';
-                echo '<li><a href="' . esc_url(get_permalink($p->ID)) . '"' . $class_attr . '>' . esc_html($p->post_title) . '</a></li>';
+            echo '<ul>';
+            foreach ($menu_items as $item) {
+                $is_active = (is_front_page() && $item['slug'] === 'home') || (is_page($item['slug']));
+                $active_class = $is_active ? ' class="active"' : '';
+                echo '<li><a href="' . esc_url($item['url']) . '"' . $active_class . '>' . esc_html($item['title']) . '</a></li>';
             }
             echo '</ul>';
         }
@@ -51,6 +56,8 @@
 
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
+
+      <a class="btn-getstarted d-none d-md-inline-block" href="<?php echo esc_url(home_url('/about/')); ?>">Get Started</a>
 
     </div>
 

@@ -1,14 +1,11 @@
 <?php
 /**
  * Template Name: Services Page
- * 100% Dynamic CMS Managed Services Template
+ * 100% Dynamic CMS Managed Services Template with rich fallbacks
  */
 get_header();
-$page_id       = get_the_ID();
-$front_page_id = get_option('page_on_front');
-
-// Check Services List on this page or front page
-$services_list = function_exists('get_field') ? (get_field('services_list', $page_id) ?: get_field('services_list', $front_page_id)) : false;
+$page_id   = get_the_ID();
+$asset_uri = get_template_directory_uri() . '/assets';
 ?>
 
 <!-- Page Title -->
@@ -25,68 +22,44 @@ $services_list = function_exists('get_field') ? (get_field('services_list', $pag
 </div>
 
 <!-- Services Section -->
-<?php
-$service_cpt_query = new WP_Query(array('post_type' => 'service', 'posts_per_page' => -1, 'post_status' => 'publish', 'orderby' => 'menu_order date', 'order' => 'ASC'));
-
-if ($service_cpt_query->have_posts() || !empty($services_list)) :
-?>
 <section id="services" class="services section">
   <div class="container">
     <div class="row gy-4">
       <?php
+      $service_cpt_query = new WP_Query(array('post_type' => 'service', 'posts_per_page' => 12, 'post_status' => 'publish', 'orderby' => 'menu_order date', 'order' => 'ASC'));
+      $default_services = array(
+          array('icon' => 'bi bi-briefcase', 'title' => 'Dolor Sitema', 'desc' => 'Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata'),
+          array('icon' => 'bi bi-card-checklist', 'title' => 'Sed ut perspiciatis', 'desc' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur'),
+          array('icon' => 'bi bi-bar-chart', 'title' => 'Magni Dolores', 'desc' => 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'),
+          array('icon' => 'bi bi-binoculars', 'title' => 'Nemo Enim', 'desc' => 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque'),
+          array('icon' => 'bi bi-brightness-high', 'title' => 'Eiusmod Tempor', 'desc' => 'Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi'),
+          array('icon' => 'bi bi-calendar-week', 'title' => 'Ullamco Laboris', 'desc' => 'Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur')
+      );
+
       $delay = 100;
       if ($service_cpt_query->have_posts()) :
         while ($service_cpt_query->have_posts()) : $service_cpt_query->the_post();
-          $icon_sel    = function_exists('get_field') ? get_field('service_icon') : 'bi bi-briefcase';
-          $icon_custom = function_exists('get_field') ? get_field('service_icon_custom') : '';
-          $icon_class  = ($icon_sel === 'custom' && !empty($icon_custom)) ? $icon_custom : ($icon_sel ?: 'bi bi-briefcase');
-          $link_url    = function_exists('get_field') ? get_field('service_link') : '';
+          $icon_sel = function_exists('get_field') ? get_field('service_icon') : 'bi bi-briefcase';
+          $icon_class = $icon_sel ?: 'bi bi-briefcase';
       ?>
-
         <div class="col-md-6" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
           <div class="service-item d-flex position-relative h-100">
             <i class="<?php echo esc_attr($icon_class); ?> icon flex-shrink-0"></i>
             <div>
-              <h4 class="title">
-                <?php if ($link_url) : ?>
-                  <a href="<?php echo esc_url($link_url); ?>" class="stretched-link">
-                    <?php the_title(); ?>
-                  </a>
-                <?php else : ?>
-                  <?php the_title(); ?>
-                <?php endif; ?>
-              </h4>
-              <?php if (get_the_content() || get_the_excerpt()) : ?>
-                <p class="description"><?php echo get_the_content() ? wp_strip_all_tags(get_the_content()) : get_the_excerpt(); ?></p>
-              <?php endif; ?>
+              <h4 class="title"><?php the_title(); ?></h4>
+              <p class="description"><?php echo get_the_content() ? wp_strip_all_tags(get_the_content()) : get_the_excerpt(); ?></p>
             </div>
           </div>
         </div>
-      <?php
-        $delay += 100;
-        endwhile;
-        wp_reset_postdata();
-      elseif (!empty($services_list)) :
-        foreach ($services_list as $svc) :
-          $icon_class = !empty($svc['icon']) ? $svc['icon'] : 'bi bi-briefcase';
-          $link_url   = !empty($svc['link']) ? $svc['link'] : '';
+      <?php $delay += 100; endwhile; wp_reset_postdata(); else :
+        foreach ($default_services as $svc) :
       ?>
         <div class="col-md-6" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
           <div class="service-item d-flex position-relative h-100">
-            <i class="<?php echo esc_attr($icon_class); ?> icon flex-shrink-0"></i>
+            <i class="<?php echo esc_attr($svc['icon']); ?> icon flex-shrink-0"></i>
             <div>
-              <h4 class="title">
-                <?php if ($link_url) : ?>
-                  <a href="<?php echo esc_url($link_url); ?>" class="stretched-link">
-                    <?php echo esc_html($svc['title']); ?>
-                  </a>
-                <?php else : ?>
-                  <?php echo esc_html($svc['title']); ?>
-                <?php endif; ?>
-              </h4>
-              <?php if (!empty($svc['description'])) : ?>
-                <p class="description"><?php echo esc_html($svc['description']); ?></p>
-              <?php endif; ?>
+              <h4 class="title"><?php echo esc_html($svc['title']); ?></h4>
+              <p class="description"><?php echo esc_html($svc['desc']); ?></p>
             </div>
           </div>
         </div>
@@ -94,71 +67,78 @@ if ($service_cpt_query->have_posts() || !empty($services_list)) :
     </div>
   </div>
 </section>
-<?php endif; ?><!-- /Services Section -->
 
+<!-- Features Section -->
+<section id="features" class="features section light-background">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Features</h2>
+    <p>Check Our Features<br></p>
+  </div>
 
-<!-- Features Section (Dynamic ACF Repeater: features_tabs) -->
-<?php
-$feat_show     = function_exists('get_field') ? get_field('features_show', $page_id) : true;
-$feat_subtitle = function_exists('get_field') ? get_field('features_subtitle', $page_id) : '';
-$feat_title    = function_exists('get_field') ? get_field('features_title', $page_id) : '';
-$features_tabs = function_exists('get_field') ? get_field('features_tabs', $page_id) : false;
-
-if ($feat_show && !empty($features_tabs)) :
-?>
-<section id="features" class="features section">
-  <?php if ($feat_subtitle || $feat_title) : ?>
-    <div class="container section-title" data-aos="fade-up">
-      <?php if ($feat_subtitle) : ?><h2><?php echo esc_html($feat_subtitle); ?></h2><?php endif; ?>
-      <?php if ($feat_title) : ?><p><?php echo esc_html($feat_title); ?><br></p><?php endif; ?>
-    </div>
-  <?php endif; ?>
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
+  <div class="container">
     <div class="row">
       <div class="col-lg-3">
         <ul class="nav nav-tabs flex-column">
-          <?php
-          $t = 1;
-          foreach ($features_tabs as $tab) :
-            $active = ($t === 1) ? 'active show' : '';
-          ?>
-            <li class="nav-item">
-              <a class="nav-link <?php echo $active; ?>" data-bs-toggle="tab" href="#features-tab-<?php echo $t; ?>">
-                <?php echo esc_html($tab['tab_label']); ?>
-              </a>
-            </li>
-          <?php $t++; endforeach; ?>
+          <li class="nav-item"><a class="nav-link active show" data-bs-toggle="tab" href="#features-tab-1">Modi sit est</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#features-tab-2">Unde praesentium</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#features-tab-3">Pariatur explicabo</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#features-tab-4">Nostrum qui quasi</a></li>
         </ul>
       </div>
-
       <div class="col-lg-9 mt-4 mt-lg-0">
         <div class="tab-content">
-          <?php
-          $t = 1;
-          foreach ($features_tabs as $tab) :
-            $active  = ($t === 1) ? 'active show' : '';
-            $img_url = !empty($tab['image']['url']) ? $tab['image']['url'] : '';
-          ?>
-            <div class="tab-pane <?php echo $active; ?>" id="features-tab-<?php echo $t; ?>">
-              <div class="row">
-                <div class="<?php echo $img_url ? 'col-lg-8' : 'col-12'; ?> order-2 order-lg-1 mt-3 mt-lg-0">
-                  <?php if (!empty($tab['heading'])) : ?><h3><?php echo esc_html($tab['heading']); ?></h3><?php endif; ?>
-                  <?php if (!empty($tab['body'])) : ?><?php echo wp_kses_post($tab['body']); ?><?php endif; ?>
-                </div>
-                <?php if ($img_url) : ?>
-                  <div class="col-lg-4 order-1 order-lg-2 text-center">
-                    <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($tab['tab_label']); ?>" class="img-fluid">
-                  </div>
-                <?php endif; ?>
+          <div class="tab-pane active show" id="features-tab-1">
+            <div class="row">
+              <div class="col-lg-8 details order-2 order-lg-1">
+                <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
+                <p class="fst-italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+              <div class="col-lg-4 text-center order-1 order-lg-2">
+                <img src="<?php echo esc_url($asset_uri . '/img/tabs/tab-1.png'); ?>" alt="Features" class="img-fluid">
               </div>
             </div>
-          <?php $t++; endforeach; ?>
+          </div>
+          <div class="tab-pane" id="features-tab-2">
+            <div class="row">
+              <div class="col-lg-8 details order-2 order-lg-1">
+                <h3>Et blanditiis nemo veritatis excepturi</h3>
+                <p class="fst-italic">Qui laudantium consequatur laborum sit qui ad sapiente dila parde sonata raqer a videna mareta paulona marka.</p>
+                <p>Ea ipsum voluptatem consequatur quis est. Illum error ullam omnis quia et reiciendis sunt sunt est. Non dolore tempora ut et facilis.</p>
+              </div>
+              <div class="col-lg-4 text-center order-1 order-lg-2">
+                <img src="<?php echo esc_url($asset_uri . '/img/tabs/tab-2.png'); ?>" alt="Features" class="img-fluid">
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="features-tab-3">
+            <div class="row">
+              <div class="col-lg-8 details order-2 order-lg-1">
+                <h3>Impedit facilis occaecati odio neque aperiam sit</h3>
+                <p class="fst-italic">Eos voluptatibus quo. Odio similique illum id quidem non enim fuga. Qui natus non sunt dicta dolor et.</p>
+                <p>Nostrum quibusdam inventore voluptatem consequatur adipisci. Velit inventore voluptas id aut et temporibus incidunt.</p>
+              </div>
+              <div class="col-lg-4 text-center order-1 order-lg-2">
+                <img src="<?php echo esc_url($asset_uri . '/img/tabs/tab-3.png'); ?>" alt="Features" class="img-fluid">
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="features-tab-4">
+            <div class="row">
+              <div class="col-lg-8 details order-2 order-lg-1">
+                <h3>Fuga repudiandae temporibus voluptatem perferendis</h3>
+                <p class="fst-italic">Totam aperiam accusamus. Repellat consequuntur iure voluptas iure porro quis delectus</p>
+                <p>Eaque consequuntur consequuntur libero expedita in voluptas. Nostrum ipsam necessitatibus aliquam fugiat debitis quis velit.</p>
+              </div>
+              <div class="col-lg-4 text-center order-1 order-lg-2">
+                <img src="<?php echo esc_url($asset_uri . '/img/tabs/tab-4.png'); ?>" alt="Features" class="img-fluid">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-<?php endif; ?><!-- /Features Section -->
 
 <?php get_footer(); ?>
