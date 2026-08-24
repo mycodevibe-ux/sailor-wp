@@ -261,65 +261,86 @@ function sailor_register_cpts() {
 
     // Portfolio CPT
     register_post_type('portfolio', array(
-        'labels'      => array(
+        'labels'          => array(
             'name'          => __('Portfolio', 'sailor'),
             'singular_name' => __('Portfolio Item', 'sailor'),
             'add_new_item'  => __('Add New Project', 'sailor'),
             'edit_item'     => __('Edit Project', 'sailor'),
         ),
-        'public'      => true,
-        'has_archive' => true,
-        'supports'    => array('title', 'editor', 'thumbnail', 'excerpt'),
-        'menu_icon'   => 'dashicons-portfolio',
-        'rewrite'     => array('slug' => 'portfolio'),
-        'show_in_rest' => true,
+        'public'          => true,
+        'has_archive'     => true,
+        'supports'        => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'author', 'page-attributes'),
+        'capability_type' => 'post',
+        'map_meta_cap'    => true,
+        'menu_icon'       => 'dashicons-portfolio',
+        'rewrite'         => array('slug' => 'portfolio'),
+        'show_in_rest'    => true,
     ));
 
     // Team CPT
     register_post_type('team', array(
-        'labels'      => array(
+        'labels'          => array(
             'name'          => __('Team', 'sailor'),
             'singular_name' => __('Team Member', 'sailor'),
             'add_new_item'  => __('Add New Member', 'sailor'),
         ),
-        'public'      => true,
-        'has_archive' => false,
-        'supports'    => array('title', 'editor', 'thumbnail'),
-        'menu_icon'   => 'dashicons-groups',
-        'rewrite'     => array('slug' => 'team'),
-        'show_in_rest' => true,
+        'public'          => true,
+        'has_archive'     => false,
+        'supports'        => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'author'),
+        'capability_type' => 'post',
+        'map_meta_cap'    => true,
+        'menu_icon'       => 'dashicons-groups',
+        'rewrite'         => array('slug' => 'team'),
+        'show_in_rest'    => true,
     ));
 
     // Services CPT
     register_post_type('service', array(
-        'labels'      => array(
+        'labels'          => array(
             'name'          => __('Services', 'sailor'),
             'singular_name' => __('Service', 'sailor'),
             'add_new_item'  => __('Add New Service', 'sailor'),
             'edit_item'     => __('Edit Service', 'sailor'),
         ),
-        'public'      => true,
-        'has_archive' => false,
-        'supports'    => array('title', 'editor', 'excerpt', 'thumbnail'),
-        'menu_icon'   => 'dashicons-hammer',
-        'rewrite'     => array('slug' => 'service-item'),
-        'show_in_rest' => true,
+        'public'          => true,
+        'has_archive'     => false,
+        'supports'        => array('title', 'editor', 'excerpt', 'thumbnail', 'custom-fields', 'author'),
+        'capability_type' => 'post',
+        'map_meta_cap'    => true,
+        'menu_icon'       => 'dashicons-hammer',
+        'rewrite'         => array('slug' => 'service-item'),
+        'show_in_rest'    => true,
     ));
 
     // Testimonials CPT
     register_post_type('testimonial', array(
-        'labels'      => array(
+        'labels'          => array(
             'name'          => __('Testimonials', 'sailor'),
             'singular_name' => __('Testimonial', 'sailor'),
             'add_new_item'  => __('Add New Testimonial', 'sailor'),
         ),
-        'public'      => true,
-        'has_archive' => false,
-        'supports'    => array('title', 'editor', 'thumbnail'),
-        'menu_icon'   => 'dashicons-format-quote',
-        'rewrite'     => array('slug' => 'testimonials'),
-        'show_in_rest' => true,
+        'public'          => true,
+        'has_archive'     => false,
+        'supports'        => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'author'),
+        'capability_type' => 'post',
+        'map_meta_cap'    => true,
+        'menu_icon'       => 'dashicons-format-quote',
+        'rewrite'         => array('slug' => 'testimonials'),
+        'show_in_rest'    => true,
     ));
+
+    // Auto-fix post_author and grant full admin capabilities
+    global $wpdb;
+    if ($wpdb) {
+        $wpdb->query("UPDATE {$wpdb->posts} SET post_author = 1 WHERE post_author = 0 OR post_author IS NULL");
+    }
+    $admin_role = get_role('administrator');
+    if ($admin_role) {
+        $caps = array('edit_posts', 'edit_others_posts', 'edit_published_posts', 'publish_posts', 'read_private_posts', 'delete_posts', 'delete_others_posts', 'delete_published_posts', 'delete_private_posts', 'edit_private_posts');
+        foreach ($caps as $cap) {
+            $admin_role->add_cap($cap);
+        }
+    }
 }
 add_action('init', 'sailor_register_cpts');
 
