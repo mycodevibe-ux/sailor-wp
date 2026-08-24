@@ -21,57 +21,27 @@ add_filter('dbdelta_create_queries', function($queries) {
     return $queries;
 });
 
-// Robust get_field fallback ONLY IF ACF plugin is NOT active / installed
-add_action('init', function() {
-    if ( ! class_exists('ACF') && ! function_exists('acf') && ! function_exists('get_field') ) {
-        function get_field($selector, $post_id = false, $format_value = true) {
-            if ( ! $post_id ) {
-                $post_id = get_the_ID();
-            }
-            if ( $post_id === 'option' || $post_id === 'options' ) {
-                $opt = get_option('options_' . $selector);
-                return ($opt !== false && $opt !== '') ? maybe_unserialize($opt) : maybe_unserialize(get_option($selector, false));
-            }
-            $val = get_post_meta($post_id, $selector, true);
-            if ($val === '' || $val === false) {
-                return false;
-            }
-            // If repeater count
-            if (is_numeric($val) && (int)$val > 0) {
-                $rows = array();
-                $count = (int)$val;
-                $all_meta = get_post_meta($post_id);
-                for ($i = 0; $i < $count; $i++) {
-                    $row = array();
-                    $prefix = $selector . '_' . $i . '_';
-                    foreach ($all_meta as $mk => $mv) {
-                        if (strpos($mk, $prefix) === 0) {
-                            $sub_key = substr($mk, strlen($prefix));
-                            $sub_val = maybe_unserialize($mv[0]);
-                            if (is_numeric($sub_val) && (int)$sub_val > 0) {
-                                $img_url = wp_get_attachment_url((int)$sub_val);
-                                if ($img_url) {
-                                    $sub_val = array('url' => $img_url, 'id' => (int)$sub_val);
-                                }
-                            }
-                            $row[$sub_key] = $sub_val;
-                        }
-                    }
-                    if (!empty($row)) {
-                        $rows[] = $row;
-                    }
-                }
-                if (!empty($rows)) {
-                    return $rows;
-                }
-            }
-            return maybe_unserialize($val);
-        }
-
-        function get_sub_field($selector) { return false; }
-        function have_rows($selector, $post_id = false) { return false; }
+// Auto-activate all theme plugins on load
+add_action('admin_init', function() {
+    if (!function_exists('is_plugin_active')) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
     }
-}, 9999);
+    $plugins = array(
+        'advanced-custom-fields-pro/acf.php',
+        'custom-post-type-ui/custom-post-type-ui.php',
+        'svg-support/svg-support.php',
+        'tinymce-advanced/tinymce-advanced.php',
+        'disable-gutenberg/disable-gutenberg.php',
+        'duplicate-post/duplicate-post.php',
+        'imsanity/imsanity.php',
+        'mousewheel-smooth-scroll/mousewheel-smooth-scroll.php',
+    );
+    foreach ($plugins as $p) {
+        if (file_exists(WP_PLUGIN_DIR . '/' . $p) && !is_plugin_active($p)) {
+            activate_plugin($p, '', false, true);
+        }
+    }
+});
 
 // Auto-repair administrator role and roles schema for WordPress
 add_action('init', function() {
