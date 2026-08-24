@@ -13,9 +13,6 @@ RUN echo "upload_max_filesize = 512M" > /usr/local/etc/php/conf.d/uploads.ini \
 # Copy custom sailor theme
 COPY . /var/www/html/wp-content/themes/sailor/
 
-# Copy TiDB Cloud compatibility drop-in to wp-content/db.php
-COPY db.php /var/www/html/wp-content/db.php
-
 # Ensure Apache file permissions
 RUN chown -R www-data:www-data /var/www/html/wp-content/ \
  && chmod -R 755 /var/www/html/wp-content/
