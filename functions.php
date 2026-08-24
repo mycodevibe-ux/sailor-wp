@@ -360,13 +360,6 @@ function sailor_register_cpts() {
 }
 add_action('init', 'sailor_register_cpts');
 
-// Unconditionally bypass capability checks for Administrators so all CPT list tables display
-add_filter('map_meta_cap', function($caps, $cap, $user_id, $args) {
-    if (current_user_can('administrator') || user_can($user_id, 'administrator')) {
-        return array('exist');
-    }
-    return $caps;
-}, 99, 4);
 
 
 // ============================================================
