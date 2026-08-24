@@ -17,10 +17,42 @@ if ( ! function_exists('get_field') ) {
         }
         if ( $post_id === 'option' || $post_id === 'options' ) {
             $opt = get_option('options_' . $selector);
-            return ($opt !== false && $opt !== '') ? $opt : get_option($selector, false);
+            return ($opt !== false && $opt !== '') ? maybe_unserialize($opt) : maybe_unserialize(get_option($selector, false));
         }
         $val = get_post_meta($post_id, $selector, true);
-        return ($val !== '') ? $val : false;
+        if ($val === '' || $val === false) {
+            return false;
+        }
+        // If repeater count (e.g. integer or numeric string)
+        if (is_numeric($val) && (int)$val > 0) {
+            $rows = array();
+            $count = (int)$val;
+            $all_meta = get_post_meta($post_id);
+            for ($i = 0; $i < $count; $i++) {
+                $row = array();
+                $prefix = $selector . '_' . $i . '_';
+                foreach ($all_meta as $mk => $mv) {
+                    if (strpos($mk, $prefix) === 0) {
+                        $sub_key = substr($mk, strlen($prefix));
+                        $sub_val = maybe_unserialize($mv[0]);
+                        if (is_numeric($sub_val) && (int)$sub_val > 0) {
+                            $img_url = wp_get_attachment_url((int)$sub_val);
+                            if ($img_url) {
+                                $sub_val = array('url' => $img_url, 'id' => (int)$sub_val);
+                            }
+                        }
+                        $row[$sub_key] = $sub_val;
+                    }
+                }
+                if (!empty($row)) {
+                    $rows[] = $row;
+                }
+            }
+            if (!empty($rows)) {
+                return $rows;
+            }
+        }
+        return maybe_unserialize($val);
     }
 }
 
@@ -139,6 +171,18 @@ function sailor_theme_setup() {
         'footer_useful'   => __('Footer Useful Links', 'sailor'),
         'footer_services' => __('Footer Services Links', 'sailor'),
     ));
+
+    // Enable support for custom background
+    add_theme_support('custom-background');
+
+    // Auto-ensure Home Page is set as Static Front Page
+    if (get_option('show_on_front') !== 'page') {
+        $home = get_page_by_path('home') ?: get_page_by_title('Home');
+        if ($home) {
+            update_option('show_on_front', 'page');
+            update_option('page_on_front', $home->ID);
+        }
+    }
 }
 add_action('after_setup_theme', 'sailor_theme_setup');
 

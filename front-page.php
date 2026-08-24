@@ -16,8 +16,8 @@ $hero_show   = function_exists('get_field') ? get_field('hero_show', $front_id) 
 if ($hero_show === null || $hero_show === '') $hero_show = true;
 $hero_slides = function_exists('get_field') ? get_field('hero_slides', $front_id) : false;
 
-// Robust Fallback slides if ACF repeater is empty
-if (empty($hero_slides)) {
+// Robust Fallback slides if ACF repeater is empty or not an array
+if (empty($hero_slides) || !is_array($hero_slides)) {
     $hero_slides = array(
         array(
             'image'       => array('url' => $asset_uri . '/img/hero-carousel/hero-carousel-1.jpg'),
@@ -149,7 +149,7 @@ $clients_show = function_exists('get_field') ? get_field('clients_show', $front_
 if ($clients_show === null || $clients_show === '') $clients_show = true;
 $clients_list = function_exists('get_field') ? get_field('clients_list', $front_id) : false;
 
-if (empty($clients_list)) {
+if (empty($clients_list) || !is_array($clients_list)) {
     $clients_list = array(
         array('image' => array('url' => $asset_uri . '/img/clients/client-1.png'), 'name' => 'Client 1'),
         array('image' => array('url' => $asset_uri . '/img/clients/client-2.png'), 'name' => 'Client 2'),
@@ -237,7 +237,7 @@ if ($services_show && ($service_cpt_query->have_posts() || !empty($services_list
         $delay += 100;
         endwhile;
         wp_reset_postdata();
-      elseif (!empty($services_list)) :
+      elseif (!empty($services_list) && is_array($services_list)) :
         foreach ($services_list as $svc) :
           $icon_class = !empty($svc['icon']) ? $svc['icon'] : 'bi bi-briefcase';
           $link_url   = !empty($svc['link']) ? $svc['link'] : '';
