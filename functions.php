@@ -329,20 +329,44 @@ function sailor_register_cpts() {
         'show_in_rest'    => true,
     ));
 
-    // Auto-fix post_author and grant full admin capabilities
-    global $wpdb;
-    if ($wpdb) {
-        $wpdb->query("UPDATE {$wpdb->posts} SET post_author = 1 WHERE post_author = 0 OR post_author IS NULL");
-    }
+    // Grant all possible capabilities to Administrator
     $admin_role = get_role('administrator');
     if ($admin_role) {
-        $caps = array('edit_posts', 'edit_others_posts', 'edit_published_posts', 'publish_posts', 'read_private_posts', 'delete_posts', 'delete_others_posts', 'delete_published_posts', 'delete_private_posts', 'edit_private_posts');
+        $caps = array(
+            'edit_post', 'read_post', 'delete_post', 'edit_posts', 'edit_others_posts',
+            'publish_posts', 'read_private_posts', 'delete_posts', 'delete_others_posts',
+            'delete_published_posts', 'delete_private_posts', 'edit_private_posts',
+            'edit_portfolio', 'read_portfolio', 'delete_portfolio', 'edit_portfolios',
+            'edit_others_portfolios', 'publish_portfolios', 'read_private_portfolios',
+            'delete_portfolios', 'delete_others_portfolios', 'delete_published_portfolios',
+            'delete_private_portfolios', 'edit_private_portfolios', 'edit_published_portfolios',
+            'edit_service', 'read_service', 'delete_service', 'edit_services',
+            'edit_others_services', 'publish_services', 'read_private_services',
+            'delete_services', 'delete_others_services', 'delete_published_services',
+            'delete_private_services', 'edit_private_services', 'edit_published_services',
+            'edit_team', 'read_team', 'delete_team', 'edit_teams',
+            'edit_others_teams', 'publish_teams', 'read_private_teams',
+            'delete_teams', 'delete_others_teams', 'delete_published_teams',
+            'delete_private_teams', 'edit_private_teams', 'edit_published_teams',
+            'edit_testimonial', 'read_testimonial', 'delete_testimonial', 'edit_testimonials',
+            'edit_others_testimonials', 'publish_testimonials', 'read_private_testimonials',
+            'delete_testimonials', 'delete_others_testimonials', 'delete_published_testimonials',
+            'delete_private_testimonials', 'edit_private_testimonials', 'edit_published_testimonials'
+        );
         foreach ($caps as $cap) {
             $admin_role->add_cap($cap);
         }
     }
 }
 add_action('init', 'sailor_register_cpts');
+
+// Unconditionally bypass capability checks for Administrators so all CPT list tables display
+add_filter('map_meta_cap', function($caps, $cap, $user_id, $args) {
+    if (current_user_can('administrator') || user_can($user_id, 'administrator')) {
+        return array('exist');
+    }
+    return $caps;
+}, 99, 4);
 
 
 // ============================================================
