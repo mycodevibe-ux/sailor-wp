@@ -21,9 +21,9 @@ add_filter('dbdelta_create_queries', function($queries) {
     return $queries;
 });
 
-// Robust get_field fallback ONLY IF ACF plugin is NOT active
-add_action('after_setup_theme', function() {
-    if ( ! function_exists('get_field') ) {
+// Robust get_field fallback ONLY IF ACF plugin is NOT active / installed
+add_action('init', function() {
+    if ( ! class_exists('ACF') && ! function_exists('acf') && ! function_exists('get_field') ) {
         function get_field($selector, $post_id = false, $format_value = true) {
             if ( ! $post_id ) {
                 $post_id = get_the_ID();
@@ -67,16 +67,11 @@ add_action('after_setup_theme', function() {
             }
             return maybe_unserialize($val);
         }
-    }
 
-    if ( ! function_exists('get_sub_field') ) {
         function get_sub_field($selector) { return false; }
-    }
-
-    if ( ! function_exists('have_rows') ) {
         function have_rows($selector, $post_id = false) { return false; }
     }
-}, 999);
+}, 9999);
 
 // Auto-repair administrator role and roles schema for WordPress
 add_action('init', function() {
